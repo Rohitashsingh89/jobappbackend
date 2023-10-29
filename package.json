@@ -1,7 +1,7 @@
 {
-  "name": "node-js-jwt-auth-mongodb",
+  "name": "jobapp",
   "version": "1.0.0",
-  "description": "Node.js + MongoDB: JWT Authentication & Authorization",
+  "description": "Real Time Job Searching Web Application",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,12 +17,13 @@
     "mongodb",
     "mongoose"
   ],
-  "author": "bezkoder",
+  "author": "Rohitash Singh",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.11.2"

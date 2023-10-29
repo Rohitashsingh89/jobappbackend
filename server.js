@@ -1,39 +1,37 @@
 const express = require("express");
 const cors = require("cors");
+const dotenv = require("dotenv");
 const cookieSession = require("cookie-session");
-
-const dbConfig = require("./app/config/db.config");
+const AuthRoutes = require("./routes/AuthRoutes");
+const UserRoutes = require("./routes/UserRoutes");
+const JobRoutes = require("./routes/JobRoutes");
+const CategoryRoutes = require("./routes/CategoryRoutes");
+const jobCategoryRoutes = require("./routes/jobCategoryRoutes");
 
 const app = express();
 
 app.use(cors());
-/* for Angular Client (withCredentials) */
-// app.use(
-//   cors({
-//     credentials: true,
-//     origin: ["http://localhost:8081"],
-//   })
-// );
+dotenv.config();
 
 // parse requests of content-type - application/json
 app.use(express.json());
-
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
   cookieSession({
-    name: "bezkoder-session",
-    keys: ["COOKIE_SECRET"], // should use as secret environment variable
+    name: "JobApp-session",
+    keys: ["COOKIE_SECRET"],
     httpOnly: true
   })
 );
 
-const db = require("./app/models");
+const db = require("./models");
 const Role = db.role;
+const url = process.env.database;
 
 db.mongoose
-  .connect(`mongodb://${dbConfig.HOST}:${dbConfig.PORT}/${dbConfig.DB}`, {
+  .connect(url , {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -48,12 +46,15 @@ db.mongoose
 
 // simple route
 app.get("/", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+  res.json({ message: "Welcome to Real Time JobApp application." });
 });
 
 // routes
-require("./app/routes/auth.routes")(app);
-require("./app/routes/user.routes")(app);
+app.use("/api/auth", AuthRoutes);
+app.use("/api/access", UserRoutes);
+app.use("/api/jobs", JobRoutes);
+app.use("/api/category", CategoryRoutes);
+app.use("/api/job-category", jobCategoryRoutes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
@@ -66,7 +67,7 @@ function initial() {
     if (!err && count === 0) {
       new Role({
         name: "user"
-      }).save(err => {
+      }).save(err => { 
         if (err) {
           console.log("error", err);
         }
@@ -75,13 +76,13 @@ function initial() {
       });
 
       new Role({
-        name: "moderator"
+        name: "employer"
       }).save(err => {
         if (err) {
           console.log("error", err);
         }
 
-        console.log("added 'moderator' to roles collection");
+        console.log("added 'employer' to roles collection");
       });
 
       new Role({
