@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const jobCategoryController = require('../controllers/jobCategoryController');
+const jobCategoryController = require('../controllers/jobCategoryController.js');
 
 // Route to associate a job with a category
 router.post('/associate', async (req, res) => {
